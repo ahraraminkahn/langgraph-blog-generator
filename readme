@@ -1,0 +1,73 @@
+langgraph-blog-generator
+
+A minimal LangGraph example that generates a blog post in two steps: it first writes an outline for a topic, then expands that outline into a full blog post, using OpenAI's gpt-4o-mini.
+
+How it works
+
+The workflow is a simple sequential graph with a shared state:
+
+START → write_outline → generate_blog → END
+
+State (OutlineState)
+
+Field	Type	Description
+topic	str	The subject of the blog post (input)
+outline	str	Outline produced by the first node
+blog	str	Final blog post produced by node two
+
+Nodes
+
+write_outline – prompts the model to write an outline for the given topic.
+generate_blog – prompts the model to write a full blog post from that outline.
+Getting started
+Prerequisites
+Python 3.9+
+An OpenAI API key
+Installation
+bash
+git clone https://github.com/<your-username>/langgraph-blog-generator.git
+cd langgraph-blog-generator
+
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+pip install langgraph langchain-openai langchain-core python-dotenv ipython jupyter
+Configuration
+
+Create a .env file in the project root:
+
+OPENAI_API_KEY=your_api_key_here
+
+Never commit your .env file. Add it to .gitignore.
+
+Run
+
+Open the notebook and run all cells:
+
+bash
+jupyter notebook main02.ipynb
+
+The final cells invoke the workflow and print the results:
+
+python
+ans = workflow.invoke({"topic": "Python Programming"})
+
+print(ans["outline"])
+print(ans["blog"])
+
+Change the topic value to generate a post about anything you like.
+
+Project structure
+langgraph-blog-generator/
+├── main02.ipynb    # Graph definition and example run
+├── .env            # API key (not committed)
+└── README.md
+Tech stack
+LangGraph – graph-based workflow orchestration
+LangChain OpenAI – ChatOpenAI wrapper
+python-dotenv – environment variable loading
+Ideas for extension
+Add a review/edit node that critiques and improves the draft
+Add conditional edges to loop until quality criteria are met
+Accept tone, audience, or word-count parameters in the state
+Swap in a different model or provider
